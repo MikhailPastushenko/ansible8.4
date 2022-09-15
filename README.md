@@ -1,4 +1,4 @@
-# 8.2
+# Задание 8.2
 
 В site.yaml добавлен Play "Install Vector" с двумя тасками "Get vector rpm" и "Install vector rpm".
 
