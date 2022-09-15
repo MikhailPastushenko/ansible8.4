@@ -1,5 +1,13 @@
 # 8.2
 
+В site.yaml добавлен Play "Install Vector" с двумя тасками "Get vector rpm" и "Install vector rpm".
+
+В group_vars добавлена переменная для версии vector
+
+В inventory добавлны группы хостов , в которых указан развернутый хост.  
+
+#### Запуск с ключом --check  ####
+
 ```mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --check
 
 PLAY [Install Clickhouse] *******************************************************************************************************************
@@ -38,6 +46,8 @@ clickhouse-01              : ok=3    changed=1    unreachable=0    failed=0    s
 vector-01                  : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
 
 ```
+
+#### Запуск с ключом --diff ####
 
 ```mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --diff
 
@@ -79,3 +89,5 @@ PLAY RECAP *********************************************************************
 clickhouse-01              : ok=5    changed=3    unreachable=0    failed=0    skipped=0    rescued=1    ignored=1   
 vector-01                  : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
 ```
+
+К сожалению , сам пакет vector не установился из-за зависимостей 
