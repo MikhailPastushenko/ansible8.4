@@ -86,6 +86,8 @@ clickhouse-01              : ok=4    changed=1    unreachable=0    failed=0    s
 vector-01                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
   
 ```
+Также к таскам добавлены тэги clickhouse и vector 
+
 #### Запуск с ключом --tags ####
 
 ```mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --tags vector
