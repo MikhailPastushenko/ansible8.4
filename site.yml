@@ -9,6 +9,7 @@
         state: restarted
   tasks:
     - name: Get clickhouse
+      tags: clickhouse
       block:
         - name: Get clickhouse distrib
           ansible.builtin.get_url:
@@ -21,6 +22,7 @@
             url: "https://packages.clickhouse.com/rpm/stable/clickhouse-common-static-{{ clickhouse_version }}.x86_64.rpm"
             dest: "./clickhouse-common-static-{{ clickhouse_version }}.rpm"
     - name: Install clickhouse packages
+      tags: clickhouse
       become: true
       ansible.builtin.yum:
         name:
@@ -30,6 +32,7 @@
       notify: Start clickhouse service
       ignore_errors: true
     - name: Create database
+      tags: clickhouse
       ansible.builtin.command: "clickhouse-client -q 'create database logs;'"
       ignore_errors: true
       register: create_db
@@ -43,8 +46,10 @@
       ansible.builtin.get_url:
         url: "https://packages.timber.io/vector/{{vector_version}}/vector-{{vector_version}}-1.x86_64.rpm"
         dest: "./vector-{{vector_version}}-1.x86_64.rpm"
+      tags: vector
     - name: Install vector rpm
       become: true
       ansible.builtin.yum:
         name:
           - vector-{{vector_version}}-1.x86_64.rpm
+       tags: vector
