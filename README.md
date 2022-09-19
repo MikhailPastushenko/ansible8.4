@@ -8,7 +8,8 @@
 
 #### Запуск с ключом --check  ####
 
-```mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --check
+```
+mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --check
 
 PLAY [Install Clickhouse] *******************************************************************************************************************
 
@@ -49,7 +50,8 @@ vector-01                  : ok=2    changed=1    unreachable=0    failed=1    s
 
 #### Запуск с ключом --diff ####
 
-```mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --diff
+```
+mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --diff
 
 PLAY [Install Clickhouse] *******************************************************************************************************************
 
@@ -90,7 +92,8 @@ vector-01                  : ok=3    changed=2    unreachable=0    failed=0    s
 
 #### Запуск с ключом --tags ####
 
-```mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --tags vector
+```
+mikhail@Ubuntu1:~/PycharmProjects/ansible2$ ansible-playbook -i inventory/prod.yml site.yml --tags vector
 
 PLAY [Install Clickhouse] *******************************************************************************************************************
 
