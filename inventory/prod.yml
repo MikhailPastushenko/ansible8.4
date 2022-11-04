@@ -2,12 +2,18 @@
 clickhouse:
   hosts:
     clickhouse-01:
-      ansible_host: 192.168.1.2
-      ansible_user: root
-      ansible_ssh_pass: "Pa$$w0rd"
+      ansible_host: 84.252.130.149
+ #     ansible_user: root
+#     ansible_ssh_pass: "Pa$$w0rd"
 vector:
   hosts:
     vector-01:
-      ansible_host: 192.168.1.2
-      ansible_user: root
-      ansible_ssh_pass: "Pa$$w0rd"
+      ansible_host: 51.250.67.210
+ #     ansible_user: root
+ #     ansible_ssh_pass: "Pa$$w0rd"
+lighthouse:
+  hosts:
+    lighthouse-01:
+      ansible_host: 51.250.69.250
+ #     ansible_user: root
+ #     ansible_ssh_pass: "Pa$$w0rd"

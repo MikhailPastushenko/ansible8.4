@@ -1,6 +1,7 @@
 ---
 - name: Install Clickhouse
   hosts: clickhouse
+  gather_facts: false
   handlers:
     - name: Start clickhouse service
       become: true
@@ -10,17 +11,10 @@
   tasks:
     - name: Get clickhouse
       tags: clickhouse
-      block:
-        - name: Get clickhouse distrib
-          ansible.builtin.get_url:
-            url: "https://packages.clickhouse.com/rpm/stable/{{ item }}-{{ clickhouse_version }}.noarch.rpm"
-            dest: "./{{ item }}-{{ clickhouse_version }}.rpm"
-          with_items: "{{ clickhouse_packages }}"
-      rescue:
-        - name: Get clickhouse distrib
-          ansible.builtin.get_url:
+      ansible.builtin.get_url:
             url: "https://packages.clickhouse.com/rpm/stable/clickhouse-common-static-{{ clickhouse_version }}.x86_64.rpm"
             dest: "./clickhouse-common-static-{{ clickhouse_version }}.rpm"
+            mode: 0644
     - name: Install clickhouse packages
       tags: clickhouse
       become: true
@@ -36,20 +30,62 @@
       ansible.builtin.command: "clickhouse-client -q 'create database logs;'"
       ignore_errors: true
       register: create_db
-      failed_when: create_db.rc != 0 and create_db.rc !=82
+      failed_when: create_db.rc != 0 and create_db.rc != 82
       changed_when:
         create_db.rc == 0
 - name: Install Vector
   hosts: vector
+  gather_facts: false
   tasks:
     - name: Get vector rpm
       ansible.builtin.get_url:
-        url: "https://packages.timber.io/vector/{{vector_version}}/vector-{{vector_version}}-1.x86_64.rpm"
-        dest: "./vector-{{vector_version}}-1.x86_64.rpm"
+        url: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_version }}-1.x86_64.rpm"
+        dest: "./vector-{{ vector_version }}-1.x86_64.rpm"
+        mode: 0644
       tags: vector
     - name: Install vector rpm
       become: true
+      ignore_errors: true
       ansible.builtin.yum:
         name:
-          - vector-{{vector_version}}-1.x86_64.rpm
-       tags: vector
+          - vector-{{ vector_version }}-1.x86_64.rpm
+- name: Install nginx
+  hosts: lighthouse
+  gather_facts: false
+  tasks:
+    - name: NGINX - Add repository
+      become: true
+      ansible.builtin.yum_repository:
+        name: nginx
+        description: NGINX repo
+        baseurl: http://nginx.org/packages/mainline/centos/7/x86_64/
+        gpgcheck: false
+    - name: NGINX - Install
+      become: true
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+      notify: start nginx
+    - name: NGINX - create config
+      become: true
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+      notify:
+        - Restart nginx
+- name: Install lighthouse
+  hosts: lighthouse
+  tasks:
+    - name: Install dependencies
+      become: true
+      ansible.builtin.yum:
+        name: git
+        state: present
+    - name: Lighthouse - install
+      become: true
+      ansible.builtin.git:
+        repo: 'https://github.com/VKCOM/lighthouse.git'
+        version: master
+        dest: "{{ lighthouse_location_dir }}"
+      register: copy_remote
