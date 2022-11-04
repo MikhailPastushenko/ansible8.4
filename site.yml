@@ -23,9 +23,11 @@
           - clickhouse-common-static-{{ clickhouse_version }}.rpm
           - clickhouse-client-{{ clickhouse_version }}.rpm
           - clickhouse-server-{{ clickhouse_version }}.rpm
+        state: present
       notify: Start clickhouse service
       ignore_errors: true
     - name: Create database
+      become: true
       tags: clickhouse
       ansible.builtin.command: "clickhouse-client -q 'create database logs;'"
       ignore_errors: true
@@ -52,6 +54,11 @@
 - name: Install nginx
   hosts: lighthouse
   gather_facts: false
+  handlers:
+    - name: Restart-NGINX
+      ansible.builtin.service:
+        name: nginx.service
+        state: restarted
   tasks:
     - name: NGINX - Add repository
       become: true
@@ -65,15 +72,14 @@
       ansible.builtin.yum:
         name: nginx
         state: present
-      notify: start nginx
+      notify: Restart-NGINX
     - name: NGINX - create config
       become: true
       ansible.builtin.template:
         src: templates/nginx.conf.j2
         dest: /etc/nginx/nginx.conf
         mode: 0644
-      notify:
-        - Restart nginx
+      notify: Restart-NGINX
 - name: Install lighthouse
   hosts: lighthouse
   tasks:
