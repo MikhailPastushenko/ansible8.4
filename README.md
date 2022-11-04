@@ -4,7 +4,8 @@
 
 В inventory добавлена группа хостов lighthouse
 
-В templates добавлен nginx.conf.j2
+В templates добавлен шаблон конфига nginx.conf.j2
+
 
 
 ```
@@ -57,4 +58,7 @@ lighthouse-01              : ok=6    changed=0    unreachable=0    failed=0    s
 vector-01                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
 
+![img.png](img.png)
 
+#### VM с lighthouse ####
+![img_1.png](img_1.png)
